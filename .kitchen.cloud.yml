@@ -1,0 +1,63 @@
+---
+driver:
+  name: ec2
+  region: us-east-1
+  availability_zone: us-east-1a
+  aws_ssh_key_id: <%=ENV['KEY_NAME']%>
+  instance_type: t2.small
+  subnet_id: subnet-e48b3abd
+  security_group_ids: [sg-06365662, sg-40a63324]  # default, Scalr
+  tags:
+    Name: <%=ENV['KITCHEN_TAG_NAME']%>
+    app: hc_httpd
+    role: app
+    env: prod
+    CreatedBy: <%=ENV['KITCHEN_TAG_CREATEDBY']%>
+    UAI: UAI2000048
+  shared_credentials_profile: corporate
+  associate_public_ip: false
+  retryable_tries: 360
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: <%=ENV['CHEF_VERSION']%>
+
+transport:
+  username: gecloud
+  ssh_key: <%=ENV['KEY_PATH']%>
+  connection_timeout: 120
+  connection_retries: 20
+
+block_device_mappings:
+  delete_on_termination: true
+
+platforms:
+  - name: AWS-OEL6
+    driver:
+      image_id: <%=ENV['AWS_OEL6']%>  # Scalr-Cloud-OEL6-Linux-HVM (us-east-1)
+
+  - name: AWS-CENTOS6
+    driver:
+      image_id: <%=ENV['AWS_CENTOS6']%>  # Scalr-Cloud-CentOS6-Linux-HVM (us-east-1)
+
+  - name: AWS-CENTOS7
+    driver:
+      image_id: <%=ENV['AWS_CENTOS7']%>  # Scalr-Cloud-CentOS7-Linux-HVM (us-east-1)
+
+  - name: AWS-RHEL6
+    driver:
+      image_id: <%=ENV['AWS_RHEL6']%>  # Scalr-Cloud-RHEL6-Linux-HVM (us-east-1)
+
+  - name: AWS-RHEL7
+    driver:
+      image_id: <%=ENV['AWS_RHEL7']%>  # Scalr-Cloud-RHEL7-Linux-HVM (us-east-1)
+
+suites:
+  - name: default
+    run_list:
+      - recipe[httpd::default]
+
+  - name: mod_auth_openidc
+    run_list:
+      - recipe[httpd::default]
+      - recipe[httpd::mod_auth_openidc]

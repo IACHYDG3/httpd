@@ -1,0 +1,24 @@
+---
+driver:
+  name: vagrant
+  network:
+  synced_folders:
+    - [".", "/vagrant", "create: true"]
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: centos-6.7
+    driver_config:
+      box: bento/centos-6.7
+  - name: centos-7.1
+    driver_config:
+      box: bento/centos-7.1
+
+suites:
+  - name: default
+    run_list:
+      - recipe[httpd::configure_setup]
+      - recipe[httpd::default]
+      - recipe[httpd::mod_auth_openidc]

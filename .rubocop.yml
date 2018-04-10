@@ -1,0 +1,10 @@
+# .rubocop.yml
+
+# Use Cookstyle instead of Rubocop
+# Command: cookstyle .
+
+# Uncomment the following line after running `cookstyle --auto-gen-config`
+#inherit_from: .rubocop_todo.yml
+
+Style/TrailingCommaInLiteral:
+  Enabled: false

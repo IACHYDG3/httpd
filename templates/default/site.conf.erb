@@ -1,0 +1,27 @@
+<VirtualHost *:80>
+  DocumentRoot <%= node['httpd']['docroot_dir'] %>
+
+  <Directory <%= node['httpd']['docroot_dir'] %>>
+    Options FollowSymLinks
+    AllowOverride FileInfo Options
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+  </Directory>
+
+  <Directory />
+    Options FollowSymLinks
+    AllowOverride None
+  </Directory>
+
+  ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+  <Directory "/usr/lib/cgi-bin">
+    AllowOverride None
+    Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+    Order allow,deny
+    Allow from all
+  </Directory>
+
+  LogLevel warn
+
+</VirtualHost>
